@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Pioneer Bank</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body{padding: 100px;}
+        .enter-deposit-area, .deposit-withdraw-box{
+            box-shadow: 5px 5px 10px gray;
+            border-radius: 10px;
+            padding: 40px;
+            margin-top: 50px;
+        }
+        #deposit-area{display: none;}
+        .deposit{background-color: slateblue;}
+        .withdraw{background-color: lightsalmon;}
+        .balance{background-color: orange;}
+        .status{ border-radius: 10px;
+        color:white;
+    padding: 20px;
+margin:10px 20px;}
+.error-border{border: 1px solid red !important; box-shadow: none !important;}
+    </style>
+</head>
+<body>
+
+    <div id="login-area">
+        <h1 class="text-center">Welcome to Pioneer Bank</h1>
+        <div class="enter-deposit-area">
+            <h4>Login</h4>
+            <input type="text" placeholder="Email" class="form-control">
+            <br>
+            <input id="password" type="password"  placeholder="Password" class="form-control">
+            <br>
+            <div>
+                <button id="enter-btn" class="btn btn-success" >Enter</button>
+            </div>
+        </div>
+    </div>
+    <div id="deposit-area">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="deposit status">
+                    <h5>Deposit</h5>
+                    <h2>$ <span id="current-deposit-status">00</span> </h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="withdraw status">
+                    <h5>Withdraw</h5>
+                    <h2>$ <span id="current-withdraw-status" >00</span> </h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="balance status">
+                    <h5>Balance</h5>
+                    <h2>$<span id="current-balance-status">1240</span> </h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="deposit-withdraw-box">
+                    <h4>Deposit</h4>
+                    <input type="text" id="deposit-input" placeholder="$ amount you want to deposit" class="form-control">
+                    <small id="amountError" class="text-danger"></small> 
+                    <br>
+                    <button class="btn btn-success" id="deposit-btn">Deposit</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="deposit-withdraw-box">
+                    <h4>Withdraw</h4>
+                    <input type="text" id="withdraw-input" placeholder="$ amount you want to withdraw" class="form-control">
+                    <small id="amountError" class="text-danger"></small>
+                    <br>
+                    <button id="withdraw-btn" class="btn btn-success">Withdraw</button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    
+    <script>
+         
+
+        function goingDepositArea()
+        {
+            const loginAreaCall=document.getElementById('login-area');
+            loginAreaCall.style.display = 'none';
+            const depositAreaCall=document.getElementById('deposit-area');
+            depositAreaCall.style.display = 'block';
+
+        }
+
+        function handleDeposit()
+        {
+            const depositInput = document.getElementById('deposit-input');
+            const depositInputValue=depositInput.value;
+            const depositAmount = parseFloat(depositInputValue);
+
+            if(!isNaN(depositAmount) && depositInputValue !=='')
+            {
+                depositInput.classList.remove('error-border');
+                document.getElementById('amountError').innerText = '';
+                const currentDepositAmount = parseFloat(document.getElementById('current-deposit-status').innerText);
+                const finalDepositStatus = currentDepositAmount + depositAmount;
+                document.getElementById('current-deposit-status').innerText = finalDepositStatus;
+                depositInput.value = '';
+
+
+                const currentBalanceAmount = parseFloat(document.getElementById('current-balance-status').innerText);
+                const balance = currentBalanceAmount + depositAmount;
+                document.getElementById('current-balance-status').innerText = balance;
+            }else{
+                depositInput.classList.add('error-border');
+                document.getElementById('amountError').innerText = 'Enter a vaid amount';
+            }
+        }
+        function handleWithdraw()
+        {
+            const withdrawInputCall = document.getElementById('withdraw-input');
+            const withdrawInputValue = withdrawInputCall.value;
+            const withdrawAmount = parseFloat(withdrawInputValue);
+            
+
+            if(!isNaN(withdrawAmount) && withdrawInputValue !== '')
+            {
+                withdrawInputCall.classList.remove('error-border');
+                document.getElementById('amountError').innerText = 'Enter a valid amount';
+                const currentWithdrawAmount = parseFloat(document.getElementById('current-withdraw-status').innerText);
+                const finalWithdrawStatus = currentWithdrawAmount + withdrawAmount;
+                document.getElementById('current-withdraw-status').innerText = finalWithdrawStatus;
+                withdrawInputCall.value = '';
+                
+                const currentBalanceAmount = parseFloat(document.getElementById('current-balance-status').innerText);
+                const balance = currentBalanceAmount -finalWithdrawStatus;
+                document.getElementById('current-balance-status').innerText = balance;
+            } else
+            {
+                withdrawInputCall.classList.add('error-border');
+                document.getElementById('amountError').innerText = 'Enter a valid amount';
+
+            }
+
+        }
+
+
+        document.addEventListener('keypress', function(event){
+            if(event.key ==='Enter')
+            {
+                if(document.activeElement.id === 'password'){goingDepositArea();}
+                else if(document.activeElement.id === 'deposit-input'){ handleDeposit(); }
+                else if(document.activeElement.id === 'withdraw-input'){handleWithdraw();}
+            }
+        });
+
+        document.addEventListener('click', function(event)
+        {
+            if(event.target.id === 'enter-btn')
+            {
+                goingDepositArea();
+            }else if(event.target.id === 'deposit-btn')
+            {
+                handleDeposit();
+            }else if(event.target.id === 'withdraw-btn'){handleWithdraw();}
+        });
+        
+        
+
+
+       
+
+    </script>
+</body>
+</html>
