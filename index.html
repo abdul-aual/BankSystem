@@ -21,7 +21,7 @@
         color:white;
     padding: 20px;
 margin:10px 20px;}
-.error-border{border: 1px solid red !important; box-shadow: none !important;}
+.Derror-border, .Werror-border{border: 1px solid red !important; box-shadow: none !important;}
     </style>
 </head>
 <body>
@@ -65,7 +65,7 @@ margin:10px 20px;}
                 <div class="deposit-withdraw-box">
                     <h4>Deposit</h4>
                     <input type="text" id="deposit-input" placeholder="$ amount you want to deposit" class="form-control">
-                    <small id="amountError" class="text-danger"></small> 
+                    <small id="depositAmountError" class="text-danger"></small> 
                     <br>
                     <button class="btn btn-success" id="deposit-btn">Deposit</button>
                 </div>
@@ -74,7 +74,7 @@ margin:10px 20px;}
                 <div class="deposit-withdraw-box">
                     <h4>Withdraw</h4>
                     <input type="text" id="withdraw-input" placeholder="$ amount you want to withdraw" class="form-control">
-                    <small id="amountError" class="text-danger"></small>
+                    <small id="withdrawAmountError" class="text-danger"></small>
                     <br>
                     <button id="withdraw-btn" class="btn btn-success">Withdraw</button>
                 </div>
@@ -103,10 +103,10 @@ margin:10px 20px;}
             const depositInputValue=depositInput.value;
             const depositAmount = parseFloat(depositInputValue);
 
-            if(!isNaN(depositAmount) && depositInputValue !=='')
+            if(!isNaN(depositAmount) && depositInputValue !=='' && depositInputValue>0)
             {
-                depositInput.classList.remove('error-border');
-                document.getElementById('amountError').innerText = '';
+                depositInput.classList.remove('Derror-border');
+                document.getElementById('depositAmountError').innerText = '';
                 const currentDepositAmount = parseFloat(document.getElementById('current-deposit-status').innerText);
                 const finalDepositStatus = currentDepositAmount + depositAmount;
                 document.getElementById('current-deposit-status').innerText = finalDepositStatus;
@@ -117,8 +117,8 @@ margin:10px 20px;}
                 const balance = currentBalanceAmount + depositAmount;
                 document.getElementById('current-balance-status').innerText = balance;
             }else{
-                depositInput.classList.add('error-border');
-                document.getElementById('amountError').innerText = 'Enter a vaid amount';
+                depositInput.classList.add('Derror-border');
+                document.getElementById('depositAmountError').innerText = 'Enter a vaid amount';
             }
         }
         function handleWithdraw()
@@ -128,10 +128,10 @@ margin:10px 20px;}
             const withdrawAmount = parseFloat(withdrawInputValue);
             
 
-            if(!isNaN(withdrawAmount) && withdrawInputValue !== '')
+            if(!isNaN(withdrawAmount) && withdrawInputValue !== '' && withdrawInputValue >0)
             {
-                withdrawInputCall.classList.remove('error-border');
-                document.getElementById('amountError').innerText = 'Enter a valid amount';
+                withdrawInputCall.classList.remove('Werror-border');
+                document.getElementById('withdrawAmountError').innerText = '';
                 const currentWithdrawAmount = parseFloat(document.getElementById('current-withdraw-status').innerText);
                 const finalWithdrawStatus = currentWithdrawAmount + withdrawAmount;
                 document.getElementById('current-withdraw-status').innerText = finalWithdrawStatus;
@@ -142,8 +142,8 @@ margin:10px 20px;}
                 document.getElementById('current-balance-status').innerText = balance;
             } else
             {
-                withdrawInputCall.classList.add('error-border');
-                document.getElementById('amountError').innerText = 'Enter a valid amount';
+                withdrawInputCall.classList.add('Werror-border');
+                document.getElementById('withdrawAmountError').innerText = 'Enter a valid amount';
 
             }
 
